@@ -7,7 +7,9 @@ export default class SignUp extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            formData: {}
+            formData: {
+                userType: 3
+            }
         };
         this.signUp = this.signUp.bind(this);
     }
