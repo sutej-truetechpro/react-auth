@@ -1,6 +1,7 @@
 import React, {Component} from "react";
-import {BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
 import './login.scss';
+import HttpService from "../../services/http-service";
 
 export default class Login extends Component {
     constructor(props) {
@@ -16,13 +17,16 @@ export default class Login extends Component {
 
     login(e) {
         e.preventDefault();
-        console.log('hi', this.state.formData);
-    }
+        HttpService.post('/login', this.state.formData)
+            .then(res => {
+                console.log('res', res);
+            })
+    }l
 
     updateFormData(field, event) {
         let formData = this.state.formData;
-        if (field === 'username') {
-            formData.userName = event.target.value;
+        if (field === 'email') {
+            formData.email = event.target.value;
         }
         if (field === 'password') {
             formData.password = event.target.value;
@@ -40,17 +44,19 @@ export default class Login extends Component {
                             <div className={'card-text'}>
                                 <div className={'alert alert-danger alert-dismissible fade show'} role="alert">sd
                                 </div>
-                                <form>
+                                <form onSubmit={this.login}>
                                     <div className="form-group">
                                         <label htmlFor="exampleInputEmail1">Email address</label>
                                         <input type="email" className="form-control form-control-sm"
-                                               id="exampleInputEmail1"
+                                               onChange={($event) => this.updateFormData('email', $event)}
+                                               id="exampleInputEmail1" value={this.state.formData.email}
                                                aria-describedby="emailHelp"/>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="exampleInputPassword1">Password</label>
                                         <input type="password" className="form-control form-control-sm"
-                                               id="exampleInputPassword1"/>
+                                               onChange={($event) => this.updateFormData('password', $event)}
+                                               id="exampleInputPassword1" value={this.state.formData.password}/>
                                     </div>
                                     <button type="submit" className="btn btn-primary btn-block">Sign in</button>
 
