@@ -10,11 +10,17 @@ class App extends Component {
     render() {
         return (
             <div className="App">
+                {/*
+                Todo: Route protection for dashboard and any other required
+                */}
                 <Switch>
                     <Route exact path="/" component={Login}/>
                     <Route path="/sign-up" component={SignUp}/>
                     <Route path="/dashboard" component={Dashboard}/>
-                    {/*<Redirect to="/"/>*/}
+                    {/*
+                    Fallback route to login page
+                    */}
+                    <Redirect to="/"/>
                 </Switch>
                 <ToastContainer />
             </div>
