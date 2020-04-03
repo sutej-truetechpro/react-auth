@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
 import './login.scss';
 import HttpService from "../../services/http-service";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class Login extends Component {
     constructor(props) {
@@ -12,20 +14,26 @@ export default class Login extends Component {
                 password: ''
             },
             otp: '',
-            isOtpCardVisible: false
+            isOtpCardVisible: false,
+            loginApiHit: false
         };
         this.login = this.login.bind(this);
         this.verifyOtp = this.verifyOtp.bind(this);
     }
 
     login(e) {
+        this.setState({loginApiHit: true});
         e.preventDefault();
         HttpService.post('login', this.state.formData)
             .then(res => {
                 console.log('res', res);
-                if (res.data.message === 'OTP mail sent successfully') {
+                if (res && res.data.message === 'OTP mail sent successfully') {
                     this.setState({isOtpCardVisible: true});
                 }
+                this.setState({loginApiHit: false});
+            }, (err) => {
+                console.log('err', err);
+                this.setState({loginApiHit: false});
             });
     }
 
@@ -39,11 +47,12 @@ export default class Login extends Component {
         HttpService.post('verify-otp', object)
             .then(res => {
                 console.log('res', res);
-                if (res.data.message === 'Logged in successfully') {
+                if (res && res.data.message === 'Logged in successfully') {
                     this.props.history.push('/dashboard')
                 }
             });
     }
+    notify () { toast.success("Wow so easy !");}
 
     updateFormData(field, event) {
         if (field === 'otp') {
@@ -68,8 +77,6 @@ export default class Login extends Component {
                         <div className="card-body">
                             <h3 className="card-title text-center">Log in</h3>
                             <div className={'card-text'}>
-                                <div className={'alert alert-danger alert-dismissible fade show'} role="alert">sd
-                                </div>
                                 <form onSubmit={this.login}>
                                     <div className="form-group">
                                         <label htmlFor="exampleInputEmail1">Email address</label>
@@ -84,7 +91,12 @@ export default class Login extends Component {
                                                onChange={($event) => this.updateFormData('password', $event)}
                                                id="exampleInputPassword1" value={this.state.formData.password}/>
                                     </div>
-                                    <button type="submit" className="btn btn-primary btn-block">Sign in</button>
+                                    <button type="submit" className="align-items-center btn btn-block btn-primary d-flex justify-content-center">
+                                        Log in
+                                        <div className={this.state.loginApiHit ? 'spinner-border text-white ml-3' : 'd-none'} role="status">
+                                            <span className="login-spinner sr-only">Loading...</span>
+                                        </div>
+                                    </button>
 
                                     <div className="sign-up">
                                         Don't have an account? <Link to="/sign-up">Create One</Link>
@@ -111,7 +123,7 @@ export default class Login extends Component {
                         </div>
                     </div>
                 </div>
-                <button onClick={this.testRouter} >test</button>
+                <button onClick={this.notify} >test</button>
             </div>
         )
     }

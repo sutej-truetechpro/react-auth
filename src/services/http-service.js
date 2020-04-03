@@ -1,6 +1,8 @@
 import axios from 'axios'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const apiUrl = 'http://localhost:3000/api/';
+const apiUrl = 'http://localhost:5000/api/';
 
 export default class HttpService {
     static async get(endPoint, authorization = true) {
@@ -51,10 +53,15 @@ export default class HttpService {
                 .then((res) => {
                     return res
                 }).catch((err) => {
-                    console.log('err', err)
+                    console.log('err', err);
+                    HttpService.showToast(err);
                 })
         } catch (e) {
             console.log('Error', e)
         }
+    }
+
+    static showToast(err) {
+        toast.error(err.response.data.message);
     }
 }

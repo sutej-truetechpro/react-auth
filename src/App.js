@@ -3,6 +3,7 @@ import Login from '../src/views/login/login'
 import SignUp from '../src/views/sign-up/sign-up'
 import Dashboard from '../src/views/dashboard/dashboard'
 import {Route, Switch, Redirect} from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import './App.css';
 
 class App extends Component {
@@ -15,6 +16,7 @@ class App extends Component {
                     <Route path="/dashboard" component={Dashboard}/>
                     {/*<Redirect to="/"/>*/}
                 </Switch>
+                <ToastContainer />
             </div>
         );
     }

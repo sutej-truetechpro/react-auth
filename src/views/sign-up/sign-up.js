@@ -17,7 +17,7 @@ export default class SignUp extends Component {
         HttpService.post('sign-up', this.state.formData)
             .then(res => {
                 console.log('res', res);
-                if (res.data.message === 'Sign up Successful!') {
+                if (res && res.data.message === 'Sign up Successful!') {
                     this.props.history.push('/')
                 }
             });
