@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {BrowserRouter as Router, Switch, Route, Link, useHistory} from "react-router-dom";
+import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
 import './login.scss';
 import HttpService from "../../services/http-service";
 
@@ -30,7 +30,6 @@ export default class Login extends Component {
     }
 
     verifyOtp(e) {
-        const history = useHistory();
         e.preventDefault();
         console.log('state', this.state);
         const object = {
@@ -40,9 +39,8 @@ export default class Login extends Component {
         HttpService.post('verify-otp', object)
             .then(res => {
                 console.log('res', res);
-                if (res.data.message === 'OTP mail sent successfully') {
-                    this.setState({isOtpCardVisible: true});
-                    history.push('/dashboard')
+                if (res.data.message === 'Logged in successfully') {
+                    this.props.history.push('/dashboard')
                 }
             });
     }
